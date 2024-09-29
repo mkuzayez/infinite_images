@@ -32,7 +32,6 @@ class _TopicScreenState extends State<TopicScreen> {
         padding: const EdgeInsets.all(8.0),
         child: BlocBuilder<TopicImagesBloc, TopicImagesState>(
           builder: (context, state) {
-            print("topic screens state ${state.status}");
             if (state.status == Status.loading) {
               return const Center(
                 child: CircularProgressIndicator(
