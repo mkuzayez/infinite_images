@@ -89,9 +89,10 @@ class _DataProvider implements DataProvider {
   }
 
   @override
-  Future<List<ImageObject>> getTopicImages(String topic) async {
+  Future<List<ImageObject>> getTopicImages(String topic, int page) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'page': page};
+
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<List<ImageObject>>(Options(
@@ -123,34 +124,38 @@ class _DataProvider implements DataProvider {
   }
 
   @override
-Future<List<ImageObject>> searchImages(String query, int page) async {
-  final _extra = <String, dynamic>{};
-  final queryParameters = <String, dynamic>{r'query': query, r'page': page};
-  final _headers = <String, dynamic>{};
-  const Map<String, dynamic>? _data = null;
+  Future<List<ImageObject>> searchImages(String query, int page) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'query': query, r'page': page};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
 
-  final _options = _setStreamType<Map<String, dynamic>>(Options(
-    method: 'GET',
-    headers: _headers,
-    extra: _extra,
-  ).compose(
-    _dio.options,
-    'search/photos',
-    queryParameters: queryParameters,
-    data: _data,
-  ).copyWith(
-    baseUrl: _combineBaseUrls(
-      _dio.options.baseUrl,
-      baseUrl,
-    ),
-  ));
+    final _options = _setStreamType<Map<String, dynamic>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'search/photos',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+          baseUrl: _combineBaseUrls(
+            _dio.options.baseUrl,
+            baseUrl,
+          ),
+        ));
 
-  final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
 
-  List<dynamic> results = _result.data?['results'] ?? [];
+    List<dynamic> results = _result.data?['results'] ?? [];
 
-  return results.map((dynamic i) => ImageObject.fromJson(i as Map<String, dynamic>)).toList();
-}
+    return results
+        .map((dynamic i) => ImageObject.fromJson(i as Map<String, dynamic>))
+        .toList();
+  }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&

@@ -1,6 +1,6 @@
 part of 'topic_images_bloc.dart';
 
-enum Status { initial, topicImagesLoaded, loading, failure }
+enum Status { initial, topicImagesLoaded, loading, failure, loadingMore }
 
 class TopicImagesState extends Equatable {
   final Status status;

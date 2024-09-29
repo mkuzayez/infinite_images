@@ -17,8 +17,8 @@ class ImagesRepository {
     return response;
   }
 
-  Future<List<ImageObject>> getTopicImages(String topic) async {
-    var response = await dataProvider.getTopicImages(topic);
+  Future<List<ImageObject>> getTopicImages(String topic, int page) async {
+    var response = await dataProvider.getTopicImages(topic, page);
     return response;
   }
 

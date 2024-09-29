@@ -1,6 +1,5 @@
 part of 'topic_images_bloc.dart';
 
-
 sealed class TopicImagesEvent extends Equatable {
   const TopicImagesEvent();
 }
@@ -17,4 +16,12 @@ class FetchTopicImagesEvent extends TopicImagesEvent {
 class ClearTopicImagesEvent extends TopicImagesEvent {
   @override
   List<Object> get props => [];
+}
+
+class FetchMoreTopicImagesEvent extends TopicImagesEvent {
+  final String topicId;
+  const FetchMoreTopicImagesEvent(this.topicId);
+
+  @override
+  List<Object> get props => [topicId];
 }

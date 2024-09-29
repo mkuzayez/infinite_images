@@ -8,9 +8,12 @@ part 'topic_images_state.dart';
 
 class TopicImagesBloc extends Bloc<TopicImagesEvent, TopicImagesState> {
   final ImagesRepository imagesRepository;
+  bool isLoadingMore = false;
+  int page = 1;
 
   TopicImagesBloc(this.imagesRepository) : super(const TopicImagesState()) {
     on<FetchTopicImagesEvent>(getTopicImages);
+    on<FetchMoreTopicImagesEvent>(fetchMoreTopicImages);
     on<ClearTopicImagesEvent>((event, emit) {
       emit(state.copyWith(topicImages: []));
     });
@@ -24,8 +27,10 @@ class TopicImagesBloc extends Bloc<TopicImagesEvent, TopicImagesState> {
           status: Status.loading,
         ),
       );
-
-      final topicImages = await imagesRepository.getTopicImages(event.topicId);
+      page++;
+      final topicImages = await imagesRepository.getTopicImages(
+        event.topicId, page
+      );
       emit(
         state.copyWith(
           status: Status.topicImagesLoaded,
@@ -38,6 +43,42 @@ class TopicImagesBloc extends Bloc<TopicImagesEvent, TopicImagesState> {
           status: Status.failure,
         ),
       );
+    }
+  }
+
+  Future<void> fetchMoreTopicImages(
+      FetchMoreTopicImagesEvent event, Emitter<TopicImagesState> emit) async {
+    if (isLoadingMore) return;
+    isLoadingMore = true;
+
+    try {
+      emit(
+        state.copyWith(
+          status: Status.loadingMore,
+        ),
+      );
+      page++;
+      final newImages = await imagesRepository.getTopicImages(
+        event.topicId, page
+      );
+      final updatedImages = List.of(state.topicImages)
+        ..addAll(
+          newImages,
+        );
+      emit(
+        state.copyWith(
+          status: Status.topicImagesLoaded,
+          topicImages: updatedImages,
+        ),
+      );
+    } catch (error) {
+      emit(
+        state.copyWith(
+          status: Status.failure,
+        ),
+      );
+    } finally {
+      isLoadingMore = false;
     }
   }
 }

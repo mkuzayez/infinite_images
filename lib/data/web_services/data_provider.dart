@@ -16,7 +16,7 @@ abstract class DataProvider {
   Future<List<TopicObject>> getTopics();
 
   @GET('topics/{topic}/photos')
-  Future<List<ImageObject>> getTopicImages(@Path() String topic);
+  Future<List<ImageObject>> getTopicImages(@Path() String topic, @Query('page') int page);
 
   @GET('search/photos')
   Future<List<ImageObject>> searchImages(
