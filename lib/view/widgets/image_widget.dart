@@ -45,15 +45,15 @@ class ImageWidget extends StatelessWidget {
                   child: buildDescription(image),
                 ),
                 Positioned(
-                  top: 10,
-                  left: 10,
+                  top: 3,
+                  left: 3,
                   child: DownloadButton(
                     image: image,
                   ),
                 ),
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 3,
+                  right: 3,
                   child: IconButton(
                     icon: Icon(
                       isFavorited ? Icons.star : Icons.star_border,
@@ -68,6 +68,13 @@ class ImageWidget extends StatelessWidget {
                         context.read<FavoritesCubit>().addFavorite(image);
                       }
                     },
+                  ),
+                ),
+                Positioned(
+                  top: 30,
+                  left: 3,
+                  child: ShareImageButton(
+                    imageUrl: image.urls!.regular!,
                   ),
                 ),
               ],
@@ -88,15 +95,15 @@ class ImageWidget extends StatelessWidget {
                   child: buildDescription(image),
                 ),
                 Positioned(
-                  top: 10,
-                  left: 10,
+                  top: 3,
+                  left: 3,
                   child: DownloadButton(
                     image: image,
                   ),
                 ),
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 3,
+                  right: 3,
                   child: IconButton(
                     icon: Icon(
                       isFavorited ? Icons.star : Icons.star_border,
@@ -109,6 +116,13 @@ class ImageWidget extends StatelessWidget {
                         context.read<FavoritesCubit>().addFavorite(image);
                       }
                     },
+                  ),
+                ),
+                Positioned(
+                  top: 30,
+                  left: 3,
+                  child: ShareImageButton(
+                    imageUrl: image.urls!.regular!,
                   ),
                 ),
               ],

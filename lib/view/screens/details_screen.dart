@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:http_bloc_task2/business_logic/download_cubit/download_cubit.dart';
 import 'package:http_bloc_task2/data/models/image/image_model.dart';
+import 'package:http_bloc_task2/view/widgets/share_button.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailsScreen extends StatelessWidget {
   final ImageObject image;
@@ -59,6 +61,15 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
+  Future<void> launchInstagramProfile(String username) async {
+    final url = 'https://www.instagram.com/$username';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final aspectRatio = image.width! / image.height!;
@@ -66,7 +77,6 @@ class DetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(image.photoDescription!),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -144,12 +154,21 @@ class DetailsScreen extends StatelessWidget {
                   ),
                 const SizedBox(height: 25),
                 Row(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Flexible(
-                        child: Text(image.photoDescription ?? "Unavailable")),
+                      child: Text(
+                        image.photoDescription ?? "Unavailable",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    ShareImageButton(imageUrl: image.urls!.regular!),
                   ],
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     const Text("Raw Height x Weight: "),
@@ -163,9 +182,12 @@ class DetailsScreen extends StatelessWidget {
                   children: [
                     const Text("Uploader name: "),
                     const Spacer(),
-                    Text(
-                      image.user!.name ?? "Unavailable",
-                      overflow: TextOverflow.ellipsis,
+                    Expanded(
+                      child: Text(
+                        textAlign: TextAlign.end,
+                        image.user!.name ?? "Unavailable",
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
@@ -174,10 +196,33 @@ class DetailsScreen extends StatelessWidget {
                   children: [
                     const Text("Uploader Instagram: "),
                     const Spacer(),
-                    Text(
-                      "@${image.user!.instagramUsername ?? "Unavailable"}",
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    image.user!.instagramUsername != null
+                        ? GestureDetector(
+                            onTap: () => launchInstagramProfile(
+                                image.user!.instagramUsername!),
+                            child: Text(
+                              "@${image.user!.instagramUsername!}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromARGB(
+                                  255,
+                                  48,
+                                  63,
+                                  159,
+                                ),
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black54,
+                                    blurRadius: 0.5,
+                                  ),
+                                ],
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        : const Text(
+                            "Unavailable",
+                          ),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -188,6 +233,7 @@ class DetailsScreen extends StatelessWidget {
                     buildResolutionOptions(context)
                   ],
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

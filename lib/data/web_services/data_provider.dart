@@ -36,7 +36,7 @@ class DioSetup {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           options.queryParameters['client_id'] =
-              'qW08jDN2H6IQkobNr6HgvLIn0FZnfqZK2XuchL8vDAQ';
+              'HPRI7Pz2AaDU4owYy4Ia5iIqHyZjiWxUqzD6gW3gUqQ';
           return handler.next(options);
         },
       ),
