@@ -4,6 +4,7 @@ import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:http_bloc_task2/business_logic/download_cubit/download_cubit.dart';
 import 'package:http_bloc_task2/data/models/image/image_model.dart';
 import 'package:http_bloc_task2/view/widgets/share_button.dart';
+import 'package:http_bloc_task2/view/widgets/wallpaper_button.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -233,7 +234,14 @@ class DetailsScreen extends StatelessWidget {
                     buildResolutionOptions(context)
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SetWallpaperButton(imageUrl: image.urls!.regular!),
+                  ],
+                ),
+                const SizedBox(height: 40),
               ],
             ),
           ),
