@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -133,23 +134,25 @@ class DetailsScreen extends StatelessWidget {
                           curve: Curves.easeInOut,
                         ),
                       ),
-                      Image.network(
-                        image.urls!.regular!,
+                      CachedNetworkImage(
+                        imageUrl: image.urls!.regular!,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: MediaQuery.of(context).size.width / aspectRatio,
+                        
                       ),
                     ],
                   ),
                 if (image.blurHash == null)
                   Stack(
                     children: [
-                      FadeInImage.memoryNetwork(
+                      CachedNetworkImage(
+                        imageUrl: image.urls!.regular ?? image.urls!.full!,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: MediaQuery.of(context).size.width / aspectRatio,
-                        placeholder: kTransparentImage,
-                        image: image.urls!.regular ?? image.urls!.full!,
+                        placeholder: (context, url) =>
+                            Image.memory(kTransparentImage),
                       ),
                     ],
                   ),
@@ -238,7 +241,7 @@ class DetailsScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SetWallpaperButton(imageUrl: image.urls!.regular!),
+                    SetWallpaperButton(imageUrl: image.urls!.full!),
                   ],
                 ),
                 const SizedBox(height: 40),

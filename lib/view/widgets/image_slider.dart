@@ -20,7 +20,9 @@ class ImageSlider extends StatelessWidget {
               enlargeCenterPage: true,
             ),
             items: [
-              for (var topic in state.topics) PreviewImageWidget(topic: topic)
+              for (var topic in state.topics)
+                if (topic.previewImages!.isNotEmpty)
+                  PreviewImageWidget(topic: topic)
             ],
           );
         } else {

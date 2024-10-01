@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:http_bloc_task2/data/models/topic/topic_model.dart';
@@ -18,10 +19,9 @@ class PreviewImageWidget extends StatelessWidget {
               imageFit: BoxFit.cover,
               curve: Curves.easeInOut,
             ),
-          Image.network(
-            topic.previewImages!.first.urls!.regular ??
-                topic.previewImages!.first.urls!.full ??
-                'https://via.placeholder.com/1000',
+          CachedNetworkImage(
+            imageUrl: topic.previewImages!.first.urls!.regular ??
+                topic.previewImages!.first.urls!.full!,
             fit: BoxFit.cover,
             width: 1000,
           ),

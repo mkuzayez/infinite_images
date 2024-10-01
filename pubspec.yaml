@@ -56,6 +56,8 @@ dependencies:
   async_wallpaper: ^2.1.0
   path_provider: ^2.1.4
   share_plus: ^10.0.2
+  connectivity_plus: ^6.0.5
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
 

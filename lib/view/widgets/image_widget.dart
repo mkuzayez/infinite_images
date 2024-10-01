@@ -8,6 +8,8 @@ import 'package:http_bloc_task2/view/widgets/download_button.dart';
 import 'package:http_bloc_task2/view/widgets/share_button.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+
 class ImageWidget extends StatelessWidget {
   final ImageObject image;
 
@@ -32,11 +34,12 @@ class ImageWidget extends StatelessWidget {
                   imageFit: BoxFit.cover,
                   curve: Curves.easeInOut,
                 ),
-                Image.network(
-                  image.urls!.regular!,
+                CachedNetworkImage(
+                  imageUrl: image.urls!.regular!,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: MediaQuery.of(context).size.width / aspectRatio,
+                  errorListener: (value) => print(value),
                 ),
                 Positioned(
                   bottom: 10,
@@ -45,14 +48,14 @@ class ImageWidget extends StatelessWidget {
                   child: buildDescription(image),
                 ),
                 Positioned(
-                  top: 3,
+                  top: 5,
                   left: 3,
                   child: DownloadButton(
                     image: image,
                   ),
                 ),
                 Positioned(
-                  top: 3,
+                  top: 5,
                   right: 3,
                   child: IconButton(
                     icon: Icon(
@@ -71,7 +74,7 @@ class ImageWidget extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: 30,
+                  top: 40,
                   left: 3,
                   child: ShareImageButton(
                     imageUrl: image.urls!.regular!,
@@ -81,12 +84,13 @@ class ImageWidget extends StatelessWidget {
             )
           : Stack(
               children: [
-                FadeInImage.memoryNetwork(
+                CachedNetworkImage(
+                  imageUrl: image.urls!.regular ?? image.urls!.full!,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: MediaQuery.of(context).size.width / aspectRatio,
-                  placeholder: kTransparentImage,
-                  image: image.urls!.regular ?? image.urls!.full!,
+                  placeholder: (context, url) =>
+                      Image.memory(kTransparentImage),
                 ),
                 Positioned(
                   bottom: 10,
