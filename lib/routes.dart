@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_bloc_task2/business_logic/download_cubit/download_cubit.dart';
 import 'package:http_bloc_task2/business_logic/favorites_cubit/favorites_cubit.dart';
 import 'package:http_bloc_task2/business_logic/random_images_bloc/random_images_bloc.dart';
+import 'package:http_bloc_task2/business_logic/random_images_cubit/cubit/random_images_cubit.dart';
 import 'package:http_bloc_task2/business_logic/search_bloc/search_bloc.dart';
 import 'package:http_bloc_task2/business_logic/slider_bloc/slider_bloc.dart';
 import 'package:http_bloc_task2/business_logic/topic_images_bloc/topic_images_bloc.dart';
@@ -27,6 +28,7 @@ class AppRouter {
   late SearchPhotosBloc searchPhotosBloc;
   late DataProvider dataProvider;
   late HiveStorage hiveStorage;
+  late RandomImagesCubit randomImagesCubit;
 
   AppRouter() {
     final dio = DioSetup().createDio();
@@ -39,6 +41,7 @@ class AppRouter {
     searchPhotosBloc = SearchPhotosBloc(imagesRepository);
     favoritesCubit = FavoritesCubit(hiveStorage);
     downloadCubit = DownloadCubit();
+    randomImagesCubit = RandomImagesCubit(imagesRepository);
   }
 
   Route generateRoute(RouteSettings settings) {
@@ -48,7 +51,7 @@ class AppRouter {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider.value(
-                value: randomImageBloc,
+                value: randomImagesCubit,
               ),
               BlocProvider.value(
                 value: generateSliderBloc,

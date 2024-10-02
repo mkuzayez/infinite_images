@@ -1,6 +1,8 @@
 import 'package:http_bloc_task2/data/models/image/image_model.dart';
 import 'package:http_bloc_task2/data/models/topic/topic_model.dart';
+import 'package:http_bloc_task2/data/web_services/api_result.dart';
 import 'package:http_bloc_task2/data/web_services/data_provider.dart';
+import 'package:http_bloc_task2/data/web_services/network_exceptions.dart';
 
 class ImagesRepository {
   final DataProvider dataProvider;
@@ -10,6 +12,15 @@ class ImagesRepository {
   Future<List<ImageObject>> getRandomImages() async {
     var response = await dataProvider.getRandomImages();
     return response;
+  }
+
+  Future<ApiResult<List<ImageObject>>> fetchRandomImages() async {
+    var response = await dataProvider.getRandomImages();
+    try {
+      return ApiResult.success(response);
+    } catch (e) {
+      return ApiResult.failure(NetworkExceptions.getDioException(e));
+    }
   }
 
   Future<List<TopicObject>> getTopics() async {
@@ -24,6 +35,6 @@ class ImagesRepository {
 
   Future<List<ImageObject>> searchImages(String query, int page) async {
     var response = await dataProvider.searchImages(query, page);
-    return response; 
+    return response;
   }
 }
